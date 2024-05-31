@@ -1,5 +1,7 @@
 import '@pixi/spine-pixi';
 import { Application, Assets } from 'pixi.js';
+import { Character } from './Character';
+import { Controller } from './Controller';
 
 // Asynchronous IIFE
 (async () => {
@@ -39,4 +41,32 @@ import { Application, Assets } from 'pixi.js';
             src: 'https://pixijs.com/assets/tutorials/spineboy-adventure/platform.png',
         },
     ]);
+
+    // Create a controller that handles keyboard inputs.
+    const controller = new Controller();
+
+    const spineBoy = new Character();
+
+        // Adjust character transformation.
+        spineBoy.view.x = app.screen.width / 2;
+        spineBoy.view.y = app.screen.height - 80;
+        spineBoy.spine.scale.set(0.5);
+        
+        // Add character to the stage.
+        app.stage.addChild(spineBoy.view);
+
+        let currentAnimation;
+
+app.ticker.add((time) =>
+{
+    const rightPressed = controller.keys.right.pressed;
+    const animationName = rightPressed ? 'walk' : 'idle';
+    const loop = true;
+
+    if (currentAnimation !== animationName)
+    {
+        currentAnimation = animationName;
+        spineBoy.spine.state.setAnimation(0, animationName, loop);
+    }
+});
 })();
