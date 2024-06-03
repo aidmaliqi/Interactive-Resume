@@ -63,6 +63,9 @@ export class Character
         // Set the default mix duration for all animations.
         // This is the duration to blend from the previous animation to the next.
         this.spine.state.data.defaultMix = 0.2;
+
+        // Track the distance walked
+        this.distance = 0; 
     }
 
     // Play the portal-in spawn animation.
@@ -92,6 +95,11 @@ export class Character
         else if (this.state.run) this.playAnimation(animationMap.run);
         else if (this.state.walk) this.playAnimation(animationMap.walk);
         else this.playAnimation(animationMap.idle);
+
+        // Update the distance if walking
+    // if (this.state.walk) {
+    //     this.distance += this.direction; // Increment or decrement based on the direction
+    // }
     }
 
     isSpawning()

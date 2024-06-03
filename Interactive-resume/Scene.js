@@ -16,7 +16,7 @@ export class Scene
 
         // Create textures for the background, mid-ground, and platform.
         const backgroundTexture = Texture.from('background');
-        const midgroundTexture = Texture.from('midground');
+       // const midgroundTexture = Texture.from('midground');
         const platformTexture = Texture.from('platform');
 
         // Calculate the ideal platform height depending on the passed-in screen height.
@@ -36,7 +36,7 @@ export class Scene
         this.background = new TilingSprite({
             texture: backgroundTexture,
             width,
-            height: backgroundTexture.height * scale,
+            height: backgroundTexture.height  *scale,
             ...baseOptions,
         });
         // this.midground = new TilingSprite({
@@ -60,7 +60,7 @@ export class Scene
 
         // Add all layers to the main view.
         //add this.midground
-        this.view.addChild(this.sky, this.background, this.platform);
+        this.view.addChild( this.background, this.platform);
 
         
     }
@@ -72,8 +72,8 @@ export class Scene
     // Set the horizontal position of the platform layer while applying parallax scrolling to the backdrop layers.
     set positionX(value)
     {
-        this.background.tilePosition.x = value * 0.1;
+        this.background.tilePosition.x = value * 0.6;
        // this.midground.tilePosition.x = value * 0.25;
-        this.platform.tilePosition.x = value;
+        this.platform.tilePosition.x = value ;
     }
 }
