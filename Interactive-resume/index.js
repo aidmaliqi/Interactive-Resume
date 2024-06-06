@@ -6,6 +6,7 @@ import { Scene } from './Scene';
 
 const blimpDistanceThreshold = 150;
 const balonDistanceThreshold = 250;
+const specialAreaDistance = 100; 
 
 (async () => {
     const app = new Application();
@@ -21,6 +22,8 @@ const balonDistanceThreshold = 250;
         { alias: 'platform', src: 'http://localhost:5173/platform.png' },
         { alias: 'blimp', src: 'blimp.png' },
         { alias: 'balon', src: 'balon.png' },
+        { alias: 'rune', src: 'rune.png' },
+
     ]);
 
     const controller = new Controller();
@@ -40,6 +43,9 @@ const balonDistanceThreshold = 250;
     //balon
     const balonTexture = Texture.from('balon');
     const balon = new Sprite(balonTexture);
+
+    const runeTexture = Texture.from('rune')
+    const rune = new Sprite(runeTexture)
    
     
     blimp.scale.set(0.22);
@@ -53,6 +59,12 @@ const balonDistanceThreshold = 250;
     balon.y = app.screen.height - balon.height / 4; // Start at the bottom
     app.stage.addChild(balon);
 
+
+    rune.scale.set(0.3)
+    rune.x = app.screen.width
+    rune.y = app.screen.height - scene.floorHeight  - 60
+    app.stage.addChild(rune)
+
     let blimpAnimating = false;
     let blimpInPosition = false;
     let targetX = 150; // Initialize targetX to the target position
@@ -60,9 +72,10 @@ const balonDistanceThreshold = 250;
     //balon
     let balonAnimating = false;
     let balonInPosition = false;
+    const animationContainer = document.getElementById('animationContainer');
+    let specialAreaReached = false;
 
     app.ticker.add(() => {
-        if (spineBoy.isSpawning()) return;
 
         let speed = 2;
         if (spineBoy.state.hover) speed = 7.5;
@@ -85,9 +98,9 @@ const balonDistanceThreshold = 250;
         if (spineBoy.state.walk) scene.positionX -= speed * scene.scale * spineBoy.direction;
 
         // Check the distance and animate the blimp
-        if (spineBoy.distance >= blimpDistanceThreshold && !blimpInPosition) {
-            blimpAnimating = true;
-        }
+        // if (spineBoy.distance >= blimpDistanceThreshold && !blimpInPosition) {
+        //     blimpAnimating = true;
+        // }
 
         if (spineBoy.distance >= blimpDistanceThreshold) {
             blimp.x = scene.positionX + app.screen.width + blimp.width + blimpDistanceThreshold;
@@ -95,24 +108,43 @@ const balonDistanceThreshold = 250;
 
         blimp.y = app.screen.height / 4 - blimp.height / 2;
 
+
+        if (spineBoy.distance >= specialAreaDistance ) {
+            rune.x =scene.positionX + app.screen.width + specialAreaDistance + rune.x;
+        }
+        // if (spineBoy.distance >= rune.x ) {
+        //     app.stage.removeChild('rune')
+        // }
         // Animate the balloon only when the character is walking
         if (spineBoy.state.walk && spineBoy.distance >= balonDistanceThreshold) {
             if (spineBoy.direction === 1) {
                 // Move the balloon up
                 balon.y -= 2; // Adjust the speed as necessary
-            } else if (spineBoy.direction === -1) {
-                // Move the balloon down
-                balon.y += 2; // Adjust the speed as necessary
-            }
+            } 
+            // else if (spineBoy.direction === -1) {
+            //     // Move the balloon down
+            //     balon.y += 2; // Adjust the speed as necessary
+            // }
 
             // If the balloon goes off the top or bottom of the screen, reset its position
-            if (balon.y < -balon.height / 2) {
-                balon.y = app.screen.height - balon.height / 2;
-            } else if (balon.y > app.screen.height - balon.height / 2) {
-                balon.y = -balon.height / 2;
-            }
+            // if (balon.y < -balon.height / 2) {
+            //     balon.y = app.screen.height - balon.height / 2;
+            // } else if (balon.y > app.screen.height - balon.height / 2) {
+            //     balon.y = -balon.height / 2;
+            // }
         }
         balon.x = scene.positionX + app.screen.width + balonDistanceThreshold  + blimp.width +400;
+        
+
+        if (spineBoy.distance >= specialAreaDistance && !specialAreaReached) {
+            animationContainer.classList.remove('hidden');
+            specialAreaReached = true;
+        } else if (spineBoy.distance < specialAreaDistance && specialAreaReached) {
+            animationContainer.classList.add('hidden');
+            specialAreaReached = false;
+        }
+
+
         // if (blimpAnimating) {
         //     if (controller.keys.right.pressed) {
         //         targetX -= speed; // Move blimp left when character moves right
@@ -135,5 +167,6 @@ const balonDistanceThreshold = 250;
         //         blimpInPosition = true;
         //     }
         // }
+      
     });
 })();
