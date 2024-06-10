@@ -6,39 +6,49 @@ import { Scene } from "./Scene";
 
 const blimpDistanceThreshold = 150;
 const balonDistanceThreshold = 250;
-const specialAreaDistance = 500;
+const specialAreaDistance = 1500;
 
 (async () => {
   const app = new Application();
   await app.init({ background: "#1099bb", resizeTo: window });
+
   document.body.appendChild(app.canvas);
 
   await Assets.load([
     { alias: "background", src: "background.png" },
-   
     { alias: "platform", src: "platform.png" },
     { alias: "blimp", src: "blimp.png" },
     { alias: "balon", src: "balon.png" },
     { alias: "rune", src: "rune.png" },
+
     { alias: "Walk1", src: "character-walk/Walk-1.png" },
     { alias: "Walk2", src: "character-walk/Walk-2.png" },
     { alias: "Walk3", src: "character-walk/Walk-3.png" },
     { alias: "Walk4", src: "character-walk/Walk-4.png" },
     { alias: "Walk5", src: "character-walk/Walk-5.png" },
     { alias: "Walk6", src: "character-walk/Walk-6.png" },
-
+    { alias: "Run1", src: "character-run/Run1.png" },
+    { alias: "Run2", src: "character-run/Run2.png" },
+    { alias: "Run3", src: "character-run/Run3.png" },
+    { alias: "Run4", src: "character-run/Run4.png" },
+    { alias: "Run5", src: "character-run/Run5.png" },
+    { alias: "Run6", src: "character-run/Run6.png" },
+    { alias: "Idle1", src: "character-idle/Idle1.png" },
+    { alias: "Idle2", src: "character-idle/Idle2.png" },
+    { alias: "Idle3", src: "character-idle/Idle3.png" },
+    { alias: "Idle4", src: "character-idle/Idle4.png" },
   ]).then(() => {
     console.log("Assets loaded successfully");
-});;
+  });
 
   const controller = new Controller();
   const scene = new Scene(app.screen.width, app.screen.height);
   const spineBoy = new Character();
-
   scene.view.y = app.screen.height;
   spineBoy.view.x = app.screen.width / 4;
-  spineBoy.view.y = app.screen.height - scene.floorHeight -110;
+  spineBoy.view.y = app.screen.height - scene.floorHeight - 110;
   spineBoy.view.scale.set(3);
+  spineBoy.distance = spineBoy.view.position._x;
   app.stage.addChild(scene.view, spineBoy.view);
 
   const blimpTexture = Texture.from("blimp");
@@ -50,6 +60,8 @@ const specialAreaDistance = 500;
 
   const runeTexture = Texture.from("rune");
   const rune = new Sprite(runeTexture);
+
+  
 
   blimp.scale.set(0.22);
   blimp.x = app.screen.width;
@@ -66,25 +78,44 @@ const specialAreaDistance = 500;
 
   rune.y = app.screen.height - scene.floorHeight - 60;
   app.stage.addChild(rune);
-   
+
+  // Create a div element
+const specialAreaDiv = document.createElement('div');
+specialAreaDiv.id = 'special-area';
+specialAreaDiv.classList.add('hidden');
+specialAreaDiv.style.zIndex = '0'
+spineBoy.view.zIndex = "1"
+
+// Create an img element
+const img = document.createElement('img');
+img.src = 'Billboard.png';
+img.alt = '';
+img.style.width = '400px';
+img.style.height = '250px';
+
+// Append the img element to the specialAreaDiv
+specialAreaDiv.appendChild(img);
+
+// Append the specialAreaDiv to the body (or any other desired parent element)
+document.body.appendChild(specialAreaDiv);
+
 
   const animationContainer = document.getElementById("animationContainer");
   const runeCube = document.getElementById("cube-container");
-   console.log(runeCube)
+
+
+  // Set initial position of the special area div
+  specialAreaDiv.style.left = `${app.screen.width}px`;
   let specialAreaReached = false;
 
   app.ticker.add(() => {
     let speed = 2;
-    if (spineBoy.state.hover) speed = 7.5;
-    else if (spineBoy.state.run) speed = 3.75;
+   if (spineBoy.state.run) speed = 3.75;
 
     rune.x = specialAreaDistance + scene.positionX;
-    balon.x =
-      scene.positionX +
-      app.screen.width +
-      balonDistanceThreshold +
-      blimp.width +
-      400;
+    // console.log( "sp" +spineBoy.distance )
+    // console.log(rune.position.x)
+    // console.log(spineBoy.view.position.x)
 
     spineBoy.state.walk =
       controller.keys.left.pressed || controller.keys.right.pressed;
@@ -92,7 +123,6 @@ const specialAreaDistance = 500;
     else
       spineBoy.state.run =
         controller.keys.left.doubleTap || controller.keys.right.doubleTap;
-    spineBoy.state.hover = controller.keys.down.pressed;
     if (controller.keys.left.pressed) spineBoy.direction = -1;
     else if (controller.keys.right.pressed) spineBoy.direction = 1;
     spineBoy.state.jump = controller.keys.space.pressed;
@@ -106,18 +136,14 @@ const specialAreaDistance = 500;
     if (spineBoy.state.walk)
       scene.positionX -= speed * scene.scale * spineBoy.direction;
 
-    if (spineBoy.distance >= blimpDistanceThreshold) {
-      blimp.x =
-        scene.positionX +
-        app.screen.width +
-        blimp.width +
-        blimpDistanceThreshold;
-    }
+    blimp.x =
+      scene.positionX + app.screen.width + blimp.width + blimpDistanceThreshold;
 
-    if (spineBoy.distance +60 >= rune.x && !specialAreaReached) {
+    if (spineBoy.distance  >= specialAreaDistance  && !specialAreaReached) {
       app.stage.removeChild(rune);
       animationContainer.classList.remove("hidden");
       runeCube.classList.remove("hidden");
+      
       specialAreaReached = true;
       setTimeout(() => {
         // Add fadeOut class after 4 seconds
@@ -132,10 +158,19 @@ const specialAreaDistance = 500;
     // Animate the balloon only when the character is walking
     if (spineBoy.state.walk && spineBoy.distance >= balonDistanceThreshold) {
       if (spineBoy.direction === 1) {
-        // Move the balloon up
+        balon.x = blimp.x + 50;
         balon.y -= 2; // Adjust the speed as necessary
       }
     }
+    specialAreaDiv.classList.remove("hidden");
+
+
+    if (spineBoy.distance >= specialAreaDistance) {
+      const distanceBeyond = spineBoy.distance - specialAreaDistance;
+
+      specialAreaDiv.style.transform = `translateX(-${distanceBeyond}px)`;
+      specialAreaDiv.classList.remove("hidden");
+    } 
 
 
   });

@@ -10,25 +10,30 @@ const animationMap = {
     idle: {
         name: 'idle',
         loop: true,
+        speed: 0.04
     },
     walk: {
         name: 'walk',
         loop: true,
+        speed:0.1
     },
     run: {
         name: 'run',
         loop: true,
+        speed: 0.1
     },
     jump: {
         name: 'jump',
         timeScale: 1.5,
+        speed: 0
     },
    
   
 }; 
 const animationFrames = {
    walk: ["character-walk/Walk-1.png" , "character-walk/Walk-2.png","character-walk/Walk-3.png" , "character-walk/Walk-4.png" ,"character-walk/Walk-5.png" , "character-walk/Walk-6.png"], 
-   idle : ["character-walk/Walk-1.png"]
+   idle : ["character-idle/Idle1.png", "character-idle/Idle2.png", "character-idle/Idle3.png", "character-idle/Idle4.png"],
+   run : ["character-run/Run1.png" , "character-run/Run2.png", "character-run/Run3.png", "character-run/Run4.png", "character-run/Run5.png", "character-run/Run6.png"]
 }
 
 
@@ -58,7 +63,7 @@ export class Character
         this.animations = {}
         for (const [key, frames] of Object.entries(animationFrames)) {
             this.animations[key] = new AnimatedSprite(frames.map(frame => Texture.from(frame)));
-            this.animations[key].animationSpeed = 0.1;
+            this.animations[key].animationSpeed = animationMap[key]?.speed || 0.1; // Use the specific speed if defined
             this.animations[key].loop = animationMap[key]?.loop || false;
         }
 
@@ -71,15 +76,7 @@ export class Character
          // Track the distance walked.
          this.distance = 0;
 
-        // Add the Spine instance to the directional view.
-        // this.directionalView.addChild(this.spine);
-
-        // Add the directional view to the main view.
-        // this.view.addChild(this.directionalView);
-
-        // Set the default mix duration for all animations.
-        // This is the duration to blend from the previous animation to the next.
-        // this.spine.state.data.defaultMix = 0.2;
+       
 
     }
     playAnimation(animation) {
@@ -93,64 +90,13 @@ export class Character
 
 
         update() {
+            this.playAnimation('idle');
             if (this.state.jump) this.playAnimation('jump');
-            else if (this.state.hover) this.playAnimation('hover');
             else if (this.state.run) this.playAnimation('run');
             else if (this.state.walk) this.playAnimation('walk');
-            else this.playAnimation('idle');
+           
         }
-    // Play the portal-in spawn animation.
-    // spawn()
-    // {
-    //     this.spine.state.setAnimation(0, animationMap.spawn.name);
-    // }
-
-    // Play the spine animation.
-    // playAnimation({ name, loop = false, timeScale = 1 })
-    // {
-    //     // Skip if the animation is already playing.
-    //     if (this.currentAnimationName === name) return;
-
-    //     // Play the animation on main track instantly.
-    //     const trackEntry = this.spine.state.setAnimation(0, name, loop);
-
-    //     // Apply the animation's time scale (speed).
-    //     trackEntry.timeScale = timeScale;
-    // }
-
-    // update()
-    // {
-    //     if (this.state.jump) this.playAnimation(animationMap.jump);
-    //     if (this.isAnimationPlaying(animationMap.jump)) return;
-    //     if (this.state.hover) this.playAnimation(animationMap.hover);
-    //     else if (this.state.run) this.playAnimation(animationMap.run);
-    //     else if (this.state.walk) this.playAnimation(animationMap.walk);
-    //     else this.playAnimation(animationMap.idle);
-
-    //     // Update the distance if walking
-    // // if (this.state.walk) {
-    // //     this.distance += this.direction; // Increment or decrement based on the direction
-    // // }
-    // }
-
-    // isSpawning()
-    // {
-    //     return this.isAnimationPlaying(animationMap.spawn);
-    // }
-
-    // isAnimationPlaying({ name })
-    // {
-    //     // Check if the current animation on main track equals to the queried.
-    //     // Also check if the animation is still ongoing.
-    //     return this.currentAnimationName === name && !this.spine.state.getCurrent(0).isComplete();
-    // }
-
-    // Return the name of the current animation on main track.
-    // get currentAnimationName()
-    // {
-    //     return this.spine.state.getCurrent(0)?.animation.name;
-    // }
-
+   
     // Return character's facing direction.
     get direction()
     {
