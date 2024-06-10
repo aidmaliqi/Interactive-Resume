@@ -9,10 +9,10 @@ export class Scene
         this.view = new Container();
 
         // Create the stationary sky that fills the entire screen.
-        this.sky = Sprite.from('sky');
-        this.sky.anchor.set(0, 1);
-        this.sky.width = width;
-        this.sky.height = height;
+        // this.sky = Sprite.from('sky');
+        // this.sky.anchor.set(0, 1);
+        // this.sky.width = width;
+        // this.sky.height = height;
 
         // Create textures for the background, mid-ground, and platform.
         const backgroundTexture = Texture.from('background');
