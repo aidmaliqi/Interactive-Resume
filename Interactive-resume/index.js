@@ -14,28 +14,22 @@ const specialAreaDistance = 500;
   document.body.appendChild(app.canvas);
 
   await Assets.load([
-    {
-      alias: "spineSkeleton",
-      src: "https://raw.githubusercontent.com/pixijs/spine-v8/main/examples/assets/spineboy-pro.skel",
-    },
-    {
-      alias: "spineAtlas",
-      src: "https://raw.githubusercontent.com/pixijs/spine-v8/main/examples/assets/spineboy-pma.atlas",
-    },
-    {
-      alias: "sky",
-      src: "https://pixijs.com/assets/tutorials/spineboy-adventure/sky.png",
-    },
-    { alias: "background", src: "http://localhost:5173/background.png" },
-    {
-      alias: "midground",
-      src: "https://pixijs.com/assets/tutorials/spineboy-adventure/midground.png",
-    },
-    { alias: "platform", src: "http://localhost:5173/platform.png" },
+    { alias: "background", src: "background.png" },
+   
+    { alias: "platform", src: "platform.png" },
     { alias: "blimp", src: "blimp.png" },
     { alias: "balon", src: "balon.png" },
     { alias: "rune", src: "rune.png" },
-  ]);
+    { alias: "Walk1", src: "character-walk/Walk-1.png" },
+    { alias: "Walk2", src: "character-walk/Walk-2.png" },
+    { alias: "Walk3", src: "character-walk/Walk-3.png" },
+    { alias: "Walk4", src: "character-walk/Walk-4.png" },
+    { alias: "Walk5", src: "character-walk/Walk-5.png" },
+    { alias: "Walk6", src: "character-walk/Walk-6.png" },
+
+  ]).then(() => {
+    console.log("Assets loaded successfully");
+});;
 
   const controller = new Controller();
   const scene = new Scene(app.screen.width, app.screen.height);
@@ -43,9 +37,8 @@ const specialAreaDistance = 500;
 
   scene.view.y = app.screen.height;
   spineBoy.view.x = app.screen.width / 4;
-  spineBoy.view.y = app.screen.height - scene.floorHeight - 30;
-  spineBoy.spine.scale.set(scene.scale * 0.22);
-
+  spineBoy.view.y = app.screen.height - scene.floorHeight -110;
+  spineBoy.view.scale.set(3);
   app.stage.addChild(scene.view, spineBoy.view);
 
   const blimpTexture = Texture.from("blimp");
@@ -65,7 +58,7 @@ const specialAreaDistance = 500;
 
   //balon
   balon.scale.set(0.7);
-  // balon.x = app.screen.width; // Start at some x position
+  balon.x = app.screen.width; // Start at some x position
   balon.y = app.screen.height - balon.height / 4; // Start at the bottom
   app.stage.addChild(balon);
 
@@ -73,6 +66,7 @@ const specialAreaDistance = 500;
 
   rune.y = app.screen.height - scene.floorHeight - 60;
   app.stage.addChild(rune);
+   
 
   const animationContainer = document.getElementById("animationContainer");
   const runeCube = document.getElementById("cube-container");
@@ -83,8 +77,6 @@ const specialAreaDistance = 500;
     let speed = 2;
     if (spineBoy.state.hover) speed = 7.5;
     else if (spineBoy.state.run) speed = 3.75;
-    // console.log(rune.x)
-    // console.log( "sd" + spineBoy.distance)
 
     rune.x = specialAreaDistance + scene.positionX;
     balon.x =
@@ -145,12 +137,6 @@ const specialAreaDistance = 500;
       }
     }
 
-    // if (spineBoy.distance >= specialAreaDistance && !specialAreaReached) {
-    //   animationContainer.classList.remove("hidden");
-    //   specialAreaReached = true;
-    // } else if (spineBoy.distance < specialAreaDistance && specialAreaReached) {
-    //   animationContainer.classList.add("hidden");
-    //   specialAreaReached = false;
-    // }
+
   });
 })();
