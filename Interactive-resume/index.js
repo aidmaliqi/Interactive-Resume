@@ -61,11 +61,8 @@ const specialAreaDistance = 1500;
   const runeTexture = Texture.from("rune");
   const rune = new Sprite(runeTexture);
 
-  
-
   blimp.scale.set(0.22);
   blimp.x = app.screen.width;
-  // blimp.y = app.screen.height / 4 - blimp.height / 2;
   app.stage.addChild(blimp);
 
   //balon
@@ -75,7 +72,6 @@ const specialAreaDistance = 1500;
   app.stage.addChild(balon);
 
   rune.scale.set(0.3);
-
   rune.y = app.screen.height - scene.floorHeight - 60;
   app.stage.addChild(rune);
 
@@ -83,18 +79,53 @@ const specialAreaDistance = 1500;
 const specialAreaDiv = document.createElement('div');
 specialAreaDiv.id = 'special-area';
 specialAreaDiv.classList.add('hidden');
-specialAreaDiv.style.zIndex = '0'
-spineBoy.view.zIndex = "1"
+specialAreaDiv.style.position = 'absolute';
+specialAreaDiv.style.width = '400px';
+specialAreaDiv.style.height = '250px';
+specialAreaDiv.style.backgroundImage = 'url("Billboard.png")';
+specialAreaDiv.style.backgroundSize = 'cover';
+specialAreaDiv.style.zIndex = '2';  // Higher than other elements
+spineBoy.view.zIndex = '1'; // Ensure spineBoy has a lower z-index
 
-// Create an img element
-const img = document.createElement('img');
-img.src = 'Billboard.png';
-img.alt = '';
-img.style.width = '400px';
-img.style.height = '250px';
+// Create a video element
+const videoElement = document.createElement('video');
+videoElement.src = 'video1.mp4'; // Replace with the path to your video file
+videoElement.controls = true; // Optional: show video controls (play, pause, etc.)
+videoElement.style.position = 'absolute';
+videoElement.style.width = '94%'; // Cover the width of the div
+videoElement.style.height = '79%'; // Decrease the height of the video
+videoElement.style.display = 'none'; // Initially hide the video
+//videoElement.style.borderRadius = '10px'; // Add border radius
+videoElement.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)'; // Add a subtle shadow
+videoElement.style.padding = '0'; // Remove padding
+videoElement.style.left = '50%'; // Center horizontally
+videoElement.style.top = '50%';
 
-// Append the img element to the specialAreaDiv
-specialAreaDiv.appendChild(img);
+videoElement.style.objectFit = 'cover';  // Center vertically
+videoElement.style.paddingTop = '13%';
+videoElement.style.paddingBottom = '0.5%';
+videoElement.style.transform = 'translate(-50%, -50%)'; // Center using transform
+videoElement.style.zIndex = '1'; // Ensure video is below the specialAreaDiv
+
+const textElement = document.createElement('p');
+textElement.innerText = 'My video'; // Replace with your desired text
+textElement.style.position = 'absolute';
+textElement.style.bottom = '250px'; // Adjust as needed
+textElement.style.left = '50%'; // Center horizontally
+textElement.style.transform = 'translateX(-50%)'; // Center using transform
+textElement.style.color = 'black'; // Adjust text color as needed
+textElement.style.fontSize = '20px'; // Adjust font size as needed
+textElement.style.fontWeight = 'bold'; // Optional: make text bold
+textElement.style.zIndex = '3'; // Ensure text is above the video
+textElement.style.opacity = '0'; // Set initial opacity to 0 for fade-in effect
+textElement.style.animation = 'fadeInMove 6s forwards'; // Apply animation
+
+//const textt = document.getElementById("special-areaa");
+
+// Append the text element to the specialAreaDiv
+  specialAreaDiv.appendChild(textElement);
+// Append the video element to the specialAreaDiv
+specialAreaDiv.appendChild(videoElement);
 
 // Append the specialAreaDiv to the body (or any other desired parent element)
 document.body.appendChild(specialAreaDiv);
@@ -103,19 +134,15 @@ document.body.appendChild(specialAreaDiv);
   const animationContainer = document.getElementById("animationContainer");
   const runeCube = document.getElementById("cube-container");
 
-
   // Set initial position of the special area div
   specialAreaDiv.style.left = `${app.screen.width}px`;
   let specialAreaReached = false;
 
   app.ticker.add(() => {
     let speed = 2;
-   if (spineBoy.state.run) speed = 3.75;
+    if (spineBoy.state.run) speed = 3.75;
 
     rune.x = specialAreaDistance + scene.positionX;
-    // console.log( "sp" +spineBoy.distance )
-    // console.log(rune.position.x)
-    // console.log(spineBoy.view.position.x)
 
     spineBoy.state.walk =
       controller.keys.left.pressed || controller.keys.right.pressed;
@@ -139,11 +166,11 @@ document.body.appendChild(specialAreaDiv);
     blimp.x =
       scene.positionX + app.screen.width + blimp.width + blimpDistanceThreshold;
 
-    if (spineBoy.distance  >= specialAreaDistance  && !specialAreaReached) {
+    if (spineBoy.distance >= specialAreaDistance && !specialAreaReached) {
       app.stage.removeChild(rune);
       animationContainer.classList.remove("hidden");
       runeCube.classList.remove("hidden");
-      
+
       specialAreaReached = true;
       setTimeout(() => {
         // Add fadeOut class after 4 seconds
@@ -153,6 +180,9 @@ document.body.appendChild(specialAreaDiv);
         // Hide the animationContainer after 5 seconds (1 second for fadeOut animation)
         animationContainer.classList.add("hidden");
       }, 6000);
+
+      // Show the video element and position it
+      videoElement.style.display = 'block';
     }
 
     // Animate the balloon only when the character is walking
@@ -164,14 +194,16 @@ document.body.appendChild(specialAreaDiv);
     }
     specialAreaDiv.classList.remove("hidden");
 
-
     if (spineBoy.distance >= specialAreaDistance) {
       const distanceBeyond = spineBoy.distance - specialAreaDistance;
 
       specialAreaDiv.style.transform = `translateX(-${distanceBeyond}px)`;
       specialAreaDiv.classList.remove("hidden");
-    } 
+    }
 
-
+    if (spineBoy.distance < specialAreaDistance && specialAreaReached) {
+      videoElement.style.display = 'none';
+      specialAreaReached = false;
+    }
   });
 })();

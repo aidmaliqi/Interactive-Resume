@@ -121,6 +121,30 @@ canvas {
 .hidden {
   display: none;
   
+} 
+
+.text {
+  position: absolute;
+  bottom: 260px; /* Adjust as needed to place the text above the video */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Center using transform */
+  color: black; /* Adjust text color as needed */
+  font-size: 20px; /* Adjust font size as needed */
+  font-weight: bold; /* Optional: make text bold */
+  z-index: 3; /* Ensure text is above the video */
+  opacity: 0; /* Set initial opacity to 0 for fade-in effect */
+  animation: fadeInMove 2s forwards; /* Apply animation */
+}
+
+@keyframes fadeInMove {
+  0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-20px); /* Start slightly above final position */
+  }
+  100% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0); /* Final position */
+  }
 }
 @keyframes rotate {
   0% {
