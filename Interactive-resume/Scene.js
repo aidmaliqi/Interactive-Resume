@@ -74,6 +74,6 @@ export class Scene
     {
         this.background.tilePosition.x = value * 0.6;
        // this.midground.tilePosition.x = value * 0.25;
-        this.platform.tilePosition.x = value ;
+        this.platform.tilePosition.x = value  ;
     }
 }
