@@ -16,7 +16,67 @@
         <div class="text">My video</div>
     </div> -->
    
-    <div id="cube-container" class="hidden cube-container">
+    <div id="cube-container" class="hidden cube-container"><!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>SpineBoy Adventure</title>
+            <link rel="stylesheet" href="style.css">
+        </head>
+        <body>
+            <!-- Background Canvas -->
+            <canvas id="backgroundCanvas" class="background-canvas"></canvas>
+        
+            <!-- Div elements go here -->
+            <div id="animationContainer" class="hidden fadeIn">
+                <p>Congratulations! You have found the social rune, you can see it in the top right corner</p>
+            </div>
+        
+            <div id="cube-container" class="hidden cube-container">
+                <div class="cube">
+                    <div class="side front">
+                        <a href="https://www.facebook.com" target="_blank">
+                            <img src="social-media.png" class="rune-image" alt="Facebook">
+                        </a>
+                    </div>
+                    <div class="side back">
+                        <a href="https://www.instagram.com" target="_blank">
+                            <img src="instagram.png" class="rune-image" alt="IG">
+                        </a>
+                    </div>
+                    <div class="side left">
+                        <a href="https://www.twitter.com" target="_blank">
+                            <img src="twitter.png" class="rune-image" alt="twitter">
+                        </a>
+                    </div>
+                    <div class="side right">
+                        <a href="https://www.youtube.com" target="_blank">
+                            <img src="youtube.png" class="rune-image" alt="youtube">
+                        </a>
+                    </div>
+                    <div class="side top">
+                        <a href="https://www.tiktok.com" target="_blank">
+                            <img src="tik-tok.png" class="rune-image" alt="tiktok">
+                        </a>
+                    </div>
+                    <div class="side bottom">
+                        <a href="https://www.discord.com" target="_blank">
+                            <img src="discord.png" class="rune-image" alt="discord">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Foreground Canvas (SpineBoy) -->
+            <canvas id="foregroundCanvas" class="foreground-canvas"></canvas>
+        
+            <script type="module" src="index.js"></script>
+            <script type="module" src="Character.js"></script>
+            <script type="module" src="Controller.js"></script>
+        </body>
+        </html>
+        
         <div class="cube">
             <div class="side front">
                 <a href="https://www.facebook.com" target="_blank">
