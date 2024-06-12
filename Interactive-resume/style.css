@@ -135,7 +135,36 @@ canvas {
   opacity: 0; /* Set initial opacity to 0 for fade-in effect */
   animation: fadeInMove 2s forwards; /* Apply animation */
 }
-
+#skills {
+  position: absolute;
+  top: 50%;
+  right: 200px;
+  width: 700px; /* Adjust this value to set the distance from the right edge of the screen */
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  color: black;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: none; /* Hide the skills div initially */
+  font-size: 20px;
+  letter-spacing: 0.05cm;
+list-style-type: none;
+}
+.uli{
+  list-style-type: none;
+}
+.uli li{
+  border-bottom: 2px solid black;
+  padding-top: 45px;
+}
+.ul{
+  margin-left: 125px;
+  display: flex;
+  flex-direction: row ;
+  justify-content: space-between;
+  list-style-type: none;
+}
 @keyframes fadeInMove {
   0% {
       opacity: 0;
@@ -183,4 +212,71 @@ canvas {
   to {
     opacity: 0;
   }
+}
+.liclass{
+  margin-left: 60px;
+}
+.liclass img{
+ height: 25px;
+}
+.liclass1{
+  margin-left: 190px;
+}
+.liclass1 img{
+ height: 25px;
+}
+.liclass2{
+  margin-left: 400px;
+}
+.liclass2 img{
+ height: 25px;
+}
+.liclass3{
+  margin-left: 500px;
+}
+.liclass3 img{
+ height: 25px;
+}
+.liclass4{
+  margin-left: 260px;
+}
+.liclass4 img{
+ height: 25px;
+}
+
+.ul li, .uli li {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.ul li:nth-child(1) {
+  animation-delay: 0.5s;
+}
+.ul li:nth-child(2) {
+  animation-delay: 1s;
+}
+.ul li:nth-child(3) {
+  animation-delay: 1.5s;
+}
+.ul li:nth-child(4) {
+  animation-delay: 2s;
+}
+.ul li:nth-child(5) {
+  animation-delay: 2.5s;
+}
+
+.uli li:nth-child(1) {
+  animation-delay: 3s;
+}
+.uli li:nth-child(2) {
+  animation-delay: 3.5s;
+}
+.uli li:nth-child(3) {
+  animation-delay: 4s;
+}
+.uli li:nth-child(4) {
+  animation-delay: 4.5s;
+}
+.uli li:nth-child(5) {
+  animation-delay: 5s;
 }
